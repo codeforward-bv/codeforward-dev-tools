@@ -10,6 +10,9 @@
 
 set -euo pipefail
 
+# --- Version ---
+VERSION="2025.01.29.1"
+
 # --- Configuration ---
 REPO_OWNER="codeforward-bv"
 PRIVATE_REPO="codeforward-dev-tools-private"
@@ -34,7 +37,7 @@ fail()  { printf "${RED}[error]${NC} %s\n" "$*" >&2; exit 1; }
 # --- Main ---
 
 echo ""
-info "Installing Codeforward Dev Tools..."
+info "Codeforward Dev Tools Installer (v${VERSION})"
 echo ""
 
 # Check prerequisites
