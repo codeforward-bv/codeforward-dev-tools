@@ -8,13 +8,13 @@ Bootstrap installer for Codeforward developer tools.
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/codeforward-bv/codeforward-dev-tools/main/install.sh)"
 ```
 
-This installs and runs the Codeforward Dev Tools menu, which provides:
+## Menu Options
 
-- **Setup customer dev environment** - Clone repo, configure Odoo, create venv, install DB
-- **Create new customer repository** - Scaffold a new Odoo project from template
-- **Update Odoo worktrees** - Fetch and reset all Odoo source worktrees
-- **Add Odoo worktree** - Add community/enterprise worktrees for a specific version
-- **Sync Claude Code configuration** - Sync team CLAUDE.md, settings, and MCP servers
+1. **Setup customer project** - Clone existing or create new Odoo project
+2. **Update Odoo worktrees** - Fetch and reset all Odoo source worktrees
+3. **Add Odoo worktree** - Add community/enterprise worktrees for a specific version
+4. **Sync Claude Code configuration** - Sync team CLAUDE.md, settings, and MCP servers
+5. **Exit**
 
 ## Requirements
 
@@ -23,7 +23,7 @@ This installs and runs the Codeforward Dev Tools menu, which provides:
 - GitHub CLI (`gh`) - installed automatically if missing
 - GitHub organization access to `codeforward-bv`
 
-## Re-running
+## Usage
 
 After installation, run the tools anytime:
 
