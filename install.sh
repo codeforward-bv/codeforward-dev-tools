@@ -11,7 +11,7 @@
 set -euo pipefail
 
 # --- Version ---
-VERSION="2025.01.29.1"
+VERSION="2025.01.29.2"
 
 # --- Configuration ---
 REPO_OWNER="codeforward-bv"
@@ -89,6 +89,10 @@ else
         fail "Failed to clone private repo. Ensure you have access to $REPO_OWNER/$PRIVATE_REPO"
     fi
 fi
+
+# Display tool version
+TOOL_VERSION=$(grep -m1 '^VERSION = ' "$INSTALL_DIR/cf-dev-tools" 2>/dev/null | sed 's/VERSION = "//;s/"//' || echo "unknown")
+ok "cf-dev-tools v${TOOL_VERSION}"
 
 # Ensure uv is installed for Python management
 if ! command -v uv &>/dev/null; then
