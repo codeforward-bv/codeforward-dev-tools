@@ -11,10 +11,9 @@ Bootstrap installer for Codeforward developer tools.
 ## Menu Options
 
 1. **Setup customer project** - Clone existing or create new Odoo project
-2. **Update Odoo worktrees** - Fetch and reset all Odoo source worktrees
-3. **Add Odoo worktree** - Add community/enterprise worktrees for a specific version
-4. **Sync Claude Code configuration** - Sync team CLAUDE.md, settings, and MCP servers
-5. **Exit**
+2. **Manage Odoo worktrees** - Update all worktrees or add new versions
+3. **Sync Claude Code configuration** - Sync team CLAUDE.md, settings, and MCP servers
+4. **Exit**
 
 ## Requirements
 
