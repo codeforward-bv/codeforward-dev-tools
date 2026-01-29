@@ -200,7 +200,7 @@ if [[ ! -d "$VENV_DIR" ]]; then
 fi
 
 info "Installing dependencies..."
-uv pip install --quiet -r "$INSTALL_DIR/requirements.txt"
+uv pip install --quiet --python "$VENV_DIR/bin/python" -r "$INSTALL_DIR/requirements.txt"
 ok "Dependencies installed"
 
 # Install wrapper to ~/.local/bin
