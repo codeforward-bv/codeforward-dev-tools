@@ -91,7 +91,7 @@ else
 fi
 
 # Display tool version
-TOOL_VERSION=$(grep -m1 '^VERSION = ' "$INSTALL_DIR/cf-dev-tools" 2>/dev/null | sed 's/VERSION = "//;s/"//' || echo "unknown")
+TOOL_VERSION=$(grep -m1 '^VERSION = ' "$INSTALL_DIR/cfdevtools/config.py" 2>/dev/null | sed 's/VERSION = "//;s/"//' || echo "unknown")
 ok "cf-dev-tools v${TOOL_VERSION}"
 
 # Ensure uv is installed for Python management
