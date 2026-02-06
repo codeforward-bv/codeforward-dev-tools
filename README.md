@@ -5,7 +5,7 @@ Bootstrap installer for Codeforward developer tools.
 ## Installation
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/codeforward-bv/codeforward-dev-tools/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/codeforward-bv/cf-dev-tools/main/install.sh)"
 ```
 
 ## Menu Options
@@ -33,5 +33,5 @@ cf-dev-tools
 Or re-run the installer to update:
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/codeforward-bv/codeforward-dev-tools/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/codeforward-bv/cf-dev-tools/main/install.sh)"
 ```
