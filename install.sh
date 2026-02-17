@@ -11,7 +11,7 @@
 set -euo pipefail
 
 # --- Version ---
-VERSION="2025.01.30.1"
+VERSION="2026.02.17.1"
 
 # --- Configuration ---
 REPO_OWNER="codeforward-bv"
