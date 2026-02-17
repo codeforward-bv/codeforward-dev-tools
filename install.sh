@@ -152,6 +152,13 @@ if ! echo "$PATH" | tr ':' '\n' | grep -qx "$BIN_DIR"; then
     fi
 fi
 
+# Run post-install tasks from private repo (if available)
+POST_INSTALL="$INSTALL_DIR/scripts/post-install.sh"
+if [[ -f "$POST_INSTALL" ]]; then
+    info "Running post-install tasks..."
+    VENV_PY="$VENV_DIR/bin/python" bash "$POST_INSTALL" || true
+fi
+
 echo ""
 ok "Installation complete!"
 echo ""
