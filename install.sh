@@ -152,6 +152,15 @@ if ! echo "$PATH" | tr ':' '\n' | grep -qx "$BIN_DIR"; then
     fi
 fi
 
+# Sync Claude Code configuration (CLAUDE.md, commands, shell wrapper)
+info "Syncing Claude Code configuration..."
+"$VENV_DIR/bin/python" -c "
+import sys
+sys.path.insert(0, '$INSTALL_DIR')
+from cfdevtools.claude import sync_claude_files
+sync_claude_files()
+" 2>/dev/null && ok "Claude configuration synced" || info "Claude sync skipped (run 'cf-dev-tools sync-claude' later)"
+
 echo ""
 ok "Installation complete!"
 echo ""
