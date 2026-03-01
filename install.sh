@@ -2,16 +2,14 @@
 # ─────────────────────────────────────────────────────────────
 # Codeforward Dev Tools · Bootstrap Installer
 #
-# Minimal public script that fetches and runs the private tooling.
+# Minimal public script: checks git/gh, clones the private repo,
+# then hands off to scripts/setup.sh for everything else.
 #
 # Usage:
 #   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/codeforward-bv/cf-dev-tools/main/install.sh)"
 # ─────────────────────────────────────────────────────────────
 
 set -euo pipefail
-
-# --- Version ---
-VERSION="2026.02.17.1"
 
 # --- Configuration ---
 REPO_OWNER="codeforward-bv"
@@ -20,8 +18,6 @@ PRIVATE_REPO_SSH="git@github.com:$REPO_OWNER/$PRIVATE_REPO.git"
 BRANCH="${CF_DEV_TOOLS_BRANCH:-main}"
 
 INSTALL_DIR="$HOME/.local/share/cf-dev-tools"
-BIN_DIR="$HOME/.local/bin"
-BIN_NAME="cf-dev-tools"
 
 # --- Colors ---
 NC='\033[0m'
@@ -37,7 +33,7 @@ fail()  { printf "${RED}[error]${NC} %s\n" "$*" >&2; exit 1; }
 # --- Main ---
 
 echo ""
-info "Codeforward Dev Tools Installer (v${VERSION})"
+info "Codeforward Dev Tools Installer"
 echo ""
 
 # Check prerequisites
@@ -90,77 +86,5 @@ else
     fi
 fi
 
-# Display tool version
-TOOL_VERSION=$(grep -m1 '^VERSION = ' "$INSTALL_DIR/cfdevtools/config.py" 2>/dev/null | sed 's/VERSION = "//;s/"//' || echo "unknown")
-ok "cf-dev-tools v${TOOL_VERSION}"
-
-# Ensure uv is installed for Python management
-if ! command -v uv &>/dev/null; then
-    if [[ "$(uname -s)" == "Darwin" ]] && command -v brew &>/dev/null; then
-        info "Installing uv via Homebrew..."
-        brew install uv
-    else
-        info "Installing uv..."
-        curl -LsSf https://astral.sh/uv/install.sh | sh
-        export PATH="$HOME/.local/bin:$PATH"
-    fi
-fi
-ok "uv"
-
-# Create/update venv and install dependencies
-VENV_DIR="$INSTALL_DIR/.venv"
-if [[ ! -d "$VENV_DIR" ]]; then
-    info "Creating virtual environment..."
-    uv venv "$VENV_DIR" --quiet
-fi
-
-info "Installing dependencies..."
-uv pip install --quiet --python "$VENV_DIR/bin/python" -r "$INSTALL_DIR/requirements.txt"
-ok "Dependencies installed"
-
-# Install wrapper to ~/.local/bin
-mkdir -p "$BIN_DIR"
-
-cat > "$BIN_DIR/$BIN_NAME" << 'WRAPPER'
-#!/usr/bin/env bash
-set -euo pipefail
-
-INSTALL_DIR="$HOME/.local/share/cf-dev-tools"
-VENV_PY="$INSTALL_DIR/.venv/bin/python"
-SCRIPT="$INSTALL_DIR/cf-dev-tools"
-
-if [[ ! -x "$VENV_PY" ]]; then
-    echo "ERROR: Virtual environment not found. Re-run the installer."
-    exit 1
-fi
-
-exec "$VENV_PY" "$SCRIPT" "$@"
-WRAPPER
-
-chmod +x "$BIN_DIR/$BIN_NAME"
-ok "Installed $BIN_NAME to $BIN_DIR"
-
-# Ensure PATH
-if ! echo "$PATH" | tr ':' '\n' | grep -qx "$BIN_DIR"; then
-    ZSHRC="$HOME/.zshrc"
-    PATH_LINE='export PATH="$HOME/.local/bin:$PATH"'
-    if ! grep -Fq "$PATH_LINE" "$ZSHRC" 2>/dev/null; then
-        echo "" >> "$ZSHRC"
-        echo "# Added by Codeforward Dev Tools" >> "$ZSHRC"
-        echo "$PATH_LINE" >> "$ZSHRC"
-        info "Added ~/.local/bin to PATH in $ZSHRC"
-    fi
-fi
-
-# Run post-install tasks from private repo (if available)
-POST_INSTALL="$INSTALL_DIR/scripts/post-install.sh"
-if [[ -f "$POST_INSTALL" ]]; then
-    info "Running post-install tasks..."
-    VENV_PY="$VENV_DIR/bin/python" bash "$POST_INSTALL" || true
-fi
-
-echo ""
-ok "Installation complete!"
-echo ""
-info "Run 'cf-dev-tools' to start"
-echo ""
+# Hand off to private setup script
+exec "$INSTALL_DIR/scripts/setup.sh"
