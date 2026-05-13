@@ -42,15 +42,30 @@ info "Checking prerequisites..."
 command -v git &>/dev/null || fail "git is required. Install Xcode Command Line Tools: xcode-select --install"
 ok "git"
 
+# Install Homebrew if missing (macOS)
+if [[ "$(uname -s)" == "Darwin" ]] && ! command -v brew &>/dev/null; then
+    info "Homebrew is required but not installed."
+    # Read from /dev/tty because stdin is the curl stream when invoked as
+    # `curl ... | bash`.
+    read -p "Install Homebrew now? [y/N] " -n 1 -r REPLY < /dev/tty
+    echo
+    [[ $REPLY =~ ^[Yy]$ ]] || fail "Homebrew required. See https://brew.sh"
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if [[ -x /opt/homebrew/bin/brew ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -x /usr/local/bin/brew ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+fi
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    ok "brew (Homebrew)"
+fi
+
 # Install gh if missing (macOS)
 if ! command -v gh &>/dev/null; then
     if [[ "$(uname -s)" == "Darwin" ]]; then
-        if command -v brew &>/dev/null; then
-            info "Installing GitHub CLI via Homebrew..."
-            brew install gh
-        else
-            fail "GitHub CLI (gh) is required. Install Homebrew first, then: brew install gh"
-        fi
+        info "Installing GitHub CLI via Homebrew..."
+        brew install gh
     else
         fail "GitHub CLI (gh) is required. Install it: https://cli.github.com/"
     fi
